@@ -12,7 +12,7 @@ class_input.pack(pady=5)
 
 
 def change_info():
-    summary = traininfo.get_train_summary(class_input.get())
+    summary = traininfo.get_train_summary(class_input.get().lower())
     information_box.config(text=summary)
 
 

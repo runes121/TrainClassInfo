@@ -1,3 +1,4 @@
+import json
 import tkinter
 import ttkbootstrap as ttk
 import wikipedia
@@ -14,12 +15,17 @@ class_input.pack(pady=5)
 def change_info():
     print(f"Searching for: British Rail Class {class_input.get()}")
     try:
-        summary = wikipedia.summary(f"British Rail Class {class_input.get()}", sentences=2, auto_suggest=False, redirect=False)
+        summary = wikipedia.summary(f"British Rail Class {class_input.get()}", sentences=2, auto_suggest=False, redirect=True)
         information_box.config(text=summary)
+        with open(r"C:\Users\Admin\PycharmProjects\TrainClassInfo\offline.json", "r+") as f:
+            data = json.load(f)
+            if class_input.get() not in data:
+                data[class_input.get()] = summary
+            elif data[class_input.get()] != summary:
+                data[class_input.get()] = summary
+            json.dump(data, f, indent=4)
     except wikipedia.exceptions.PageError:
         information_box.config(text="Couldn't find class info. Does it even exist?")
-    except wikipedia.exceptions.RedirectError:
-        information_box.config(text="A redirect occurred, this most likely means this train class doesn't exist.")
     except Exception as e:
         information_box.config(text=f"An unknown error occurred. {e}")
 
